@@ -14,7 +14,7 @@ Puppet::Type.type(:openldap_module).provide(:olc) do
     # Create dn: cn=Module{0},cn=config if not exists
     dn = slapcat('-b', 'cn=config', '-H', 'ldap:///???(objectClass=olcModuleList)')
     if dn == ''
-      ldif = %Q{dn: cn=module{0},cn=config
+      ldif = %Q{dn: cn={0}module,cn=config
 changetype: add
 cn: module
 objectclass: olcModuleList
@@ -56,7 +56,7 @@ objectclass: olcModuleList
 
   def create
     t = Tempfile.new('openldap_module')
-    t << "dn: cn=module{0},cn=config\n"
+    t << "dn: cn={0}module,cn=config\n"
     t << "add: olcModuleLoad\n"
     t << "olcModuleLoad: #{resource[:name]}.la\n"
     t.close
